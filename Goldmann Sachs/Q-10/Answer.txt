@@ -1,0 +1,6 @@
+By creating a min-heap(priority-queue in C++) of size 10.
+Initially,we insert 10 elements into the priority queue.
+Then we traverse the remaining elements int the list and if any of them is greater than the top of the priority queue,
+then we remove the top element and insert the current element.
+
+This approach takes 10Millionlog(10) time. 

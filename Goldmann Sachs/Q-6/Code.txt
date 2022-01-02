@@ -1,0 +1,72 @@
+class Solution {
+public:
+    
+    int findHCF(int n1,int n2)
+    {
+        if(n1==0)
+            return n2;
+        else
+        {
+            return findHCF(n2%n1,n1);
+        }
+    }
+    
+    
+    bool check(string s1,string s2,int curr)
+    {
+        string temp1=s1.substr(0,curr);
+        string temp2=s2.substr(0,curr);
+        
+        if(temp1!=temp2)
+            return false;
+        
+        int length1=s1.length();
+        int length2=s2.length();
+        
+        //traversing a checking string 1 (s1)
+        for(int i=curr;i<length1;i=i+curr)
+        {
+            if(temp1!=s1.substr(i,curr))
+                return false;
+        }
+        
+        for(int i=curr;i<length2;i=i+curr)
+        {
+            if(temp2!=s2.substr(i,curr))
+                return false;
+        }
+        
+        return true;
+        
+    }
+    
+    
+    string gcdOfStrings(string str1, string str2) {
+        
+        int length1=str1.length();
+        int length2=str2.length();
+        
+        
+        int hcf=findHCF(length1,length2);
+        
+        int ans=-1;
+        
+        
+        if(check(str1,str2,hcf))
+        {
+            ans=hcf;
+        }
+        
+        string res="";
+            
+        if(ans==-1)
+            return  res;
+        else
+        {
+            res=str1.substr(0,ans);
+            
+            return res;
+        }
+        
+    }
+};
