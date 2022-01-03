@@ -1,0 +1,17 @@
+Given a N*N Square chessboard, we can have squares having dimensions from 1*1 to N*N.
+
+The total no. of 1*1 sqaures can be given by = (N-1+1)^2
+Similarly, 2*2 can be given by = (N-2+1)^2
+
+For a a*a square, the total no. van be given by =(N-a+1)^2
+
+Thus we can calculate the total no. of squares by 
+
+int total_squares=0;
+
+for(int i=1;i<=N;i++)
+{
+	total_squares+=((N-i+1)^2);
+}
+
+return total_squares;
