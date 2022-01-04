@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution {
+	public:
+	    
+	    bool isValid(string s)
+	    {
+	        //leading zeroes
+	        if(s[0]=='0')
+	        return false;
+	        
+	        int size=s.length();
+	        
+	        //count of consecutive zeroes
+	        for(int i=1;i<size;i++)
+	        {
+	            if(s[i]=='0' && s[i-1]=='0')
+	            {
+	                return false;
+	            }
+	            
+	            if(s[i]=='0' && s[i-1]>50)
+	            return false;
+	        }
+	        
+	        //trailing zeroes
+	       // if(size>1)
+	       // {
+	       //     if(s[size-1]=='0' && (s[size-2]!='1' && s[size-2]!='2'))
+	       //     return false;
+	       // }
+	        
+	        return true;
+	    }
+	    
+	    
+		int CountWays(string str){
+		    // Code here
+		    int size=str.length();
+		    
+		    int dp[size+1]={0};
+		    
+		    dp[0]=1;
+		    dp[1]=1;
+		    
+		    if(isValid(str)==false)
+		    return 0;
+		    
+		    for(int i=1;i<size;i++)
+		    {
+		        //checking for the zero case
+		        if(str[i]=='0' || str[i-1]=='0')
+		        {
+		            dp[i+1]=dp[i];
+		            continue;
+		        }
+		        
+		        
+		        int temp=str[i-1]-'0';
+		        temp=temp*10+(str[i]-'0');
+		        
+		        if(temp<=26)
+		        {
+		            if((i+1<size && str[i+1]!='0') ||(i==size-1))
+		            dp[i+1]=(dp[i]+dp[i-1])%1000000007;
+		            else
+		            dp[i+1]=dp[i];
+		        }
+		        else
+		        {
+		            dp[i+1]=dp[i];
+		        }
+		        
+		    }
+		    
+		    
+		    
+		    return dp[size];
+		    
+		}
+
+};
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		string str;
+		cin >> str;
+		Solution obj;
+		int ans = obj.CountWays(str);
+		cout << ans << "\n";
+	}
+	return 0;
+}  // } Driver Code Ends
