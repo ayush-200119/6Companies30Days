@@ -1,0 +1,67 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+
+ // } Driver Code Ends
+class Solution{   
+public:
+    string printMinNumberForPattern(string S){
+        // code here 
+        int min=1;
+        
+        stack<int> s;
+        
+        string res="";
+        
+        for(int i=0;i<S.length();i++)
+        {
+            if(S[i]=='I')
+            {
+                s.push(min);
+                min++;
+                
+                while(!s.empty())
+                {
+                    // cout<<s.top()<<endl;
+                    res+=(s.top()+'0');
+                    s.pop();
+                }
+            }
+            else
+            {
+                // cout<<min<<endl;
+                s.push(min);
+                min++;
+            }
+        }
+        
+        res+=(min+'0');
+        
+        //emptying the stack
+        
+        while(!s.empty())
+        {
+            res+=(s.top()+'0');
+            s.pop();
+        }
+        
+        
+        return res;
+    }
+};
+
+
+// { Driver Code Starts.
+int main() 
+{ 
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        string S;
+        cin >> S;
+        Solution ob;
+        cout << ob.printMinNumberForPattern(S) << endl;
+    }
+    return 0; 
+} 
+  // } Driver Code Ends

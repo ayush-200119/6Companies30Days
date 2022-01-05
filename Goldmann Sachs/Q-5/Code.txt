@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ull unsigned long long
+
+
+ // } Driver Code Ends
+//User function template for C++
+class Solution{
+public:	
+	// #define ull unsigned long long
+	/* Function to get the nth ugly number*/
+	ull getNthUglyNo(int n) {
+	    // code here
+	    
+	    priority_queue<ull,vector<ull>,greater<ull>> pq;
+	    pq.push(1);
+	    
+	    unordered_set<ull> mp;
+	    mp.insert(1);
+	    
+	    int count=0;
+	    
+	    if(n==1)
+	    return 1;
+	    
+	    while(count+pq.size()>=n-3)
+	    {
+	        ull temp=pq.top();
+	        pq.pop();
+	        count++;
+	        
+	        if(mp.find(temp*2)==mp.end())
+	        {
+	            pq.push(temp*2);
+	            mp.insert(temp*2);   
+	        }
+	            
+	        if(mp.find(temp*3)==mp.end())
+	        {
+	            pq.push(temp*3);
+	            mp.insert(temp*3);
+	        }
+	            
+	        if(mp.find(temp*5)==mp.end())
+	        {
+	            pq.push(temp*5);
+	            mp.insert(temp*5);
+	        }
+	        
+	    }
+	    
+	    ull ans=-1;
+	    while(count!=n)
+	    {
+	        ull temp=pq.top();
+	        pq.pop();
+	        ans=temp;
+	        
+	        count++;
+	        
+	        if(mp.find(temp*2)==mp.end())
+	        {
+	            pq.push(temp*2);
+	            mp.insert(temp*2);   
+	        }
+	            
+	        if(mp.find(temp*3)==mp.end())
+	        {
+	            pq.push(temp*3);
+	            mp.insert(temp*3);
+	        }
+	            
+	        if(mp.find(temp*5)==mp.end())
+	        {
+	            pq.push(temp*5);
+	            mp.insert(temp*5);
+	        }
+	        
+	    }
+	    
+	    return ans;
+	    
+	}
+};
+
+// { Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        Solution ob;
+        auto ans = ob.getNthUglyNo(n);
+        cout << ans << "\n";
+    }
+    return 0;
+}
+  // } Driver Code Ends
