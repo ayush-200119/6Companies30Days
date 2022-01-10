@@ -1,0 +1,102 @@
+struct element{
+    int row;
+    int col;
+    
+};
+
+class Solution {
+public:
+    
+    bool isSafe(int i,int j,int r,int c,vector<vector<int>> &grid)
+    {
+        if(i<0 || i>=r || j<0 || j>=c)
+            return false;
+        
+        if(grid[i][j]==0 || grid[i][j]==2)
+            return false;
+        
+        return true;
+        
+    }
+    
+    void rottenAdjacent(int i,int j,int r,int c,vector<vector<int>> &grid,queue<element> &q)
+    {
+        //upper
+        if(isSafe(i-1,j,r,c,grid))
+        {
+            q.push({i-1,j});
+            grid[i-1][j]=2;
+        }
+        
+        //below
+        if(isSafe(i+1,j,r,c,grid))
+        {
+            q.push({i+1,j});
+            grid[i+1][j]=2;
+        }
+        
+        //left
+        if(isSafe(i,j-1,r,c,grid))
+        {
+            q.push({i,j-1});
+            grid[i][j-1]=2;
+        }
+        
+        //right
+        if(isSafe(i,j+1,r,c,grid))
+        {
+            q.push({i,j+1});
+            grid[i][j+1]=2;
+        }
+    }
+    
+    int orangesRotting(vector<vector<int>>& grid) {
+        
+        int row=grid.size();
+        int col=grid[0].size();
+        
+        queue<element> q;
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(grid[i][j]==2)
+                {
+                    q.push({i,j});
+                }
+            }
+        }
+        
+        int time=0;
+        
+        while(!q.empty())
+        {
+            int c=q.size();
+            for(int i=0;i<c;i++)
+            {
+                struct element temp=q.front();
+                q.pop();
+                int r=temp.row;
+                int c=temp.col;
+                rottenAdjacent(r,c,row,col,grid,q);
+            }
+            
+            if(!q.empty())
+                time++;
+            
+        }
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(grid[i][j]==1)
+                    return -1;
+            }
+        }
+        
+        return time;
+        
+    }
+};

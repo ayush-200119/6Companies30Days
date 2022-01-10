@@ -1,0 +1,89 @@
+// Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+  
+//   int solve(int start,int val,int N,int A[],int K)
+//   {
+//       if(K==0)
+//       return 0;
+       
+//       if(N-start==0 || N-start==1)
+//       return 0;
+       
+//       int ans=0;
+       
+//       for(int i=start;i<N;i++)
+//       {
+//           if(A[i]<=val)
+//           {
+//               val=A[i];
+//           }
+//           else
+//           {
+//               //choice 
+//               ans=max(ans,(A[i]-val+solve(i+1,INT_MAX,N,A,K-1)));
+//           }
+//       }
+       
+//       return ans;
+       
+//   }
+  
+    int maxProfit(int K, int N, int A[]) {
+        // code here
+        
+        
+        // return solve(0,INT_MAX,N,A,K);
+        int dp[K+1][N];
+        for(int i=0;i<K+1;i++)
+        {
+            dp[i][0]=0;
+        }
+        
+        
+        for(int i=0;i<N;i++)
+        {
+            dp[0][i]=0;
+        }
+        
+        for(int i=1;i<K+1;i++)
+        {
+            for(int j=1;j<N;j++)
+            {
+                int temp=0;
+                for(int p=0;p<j;p++)
+                {
+                    temp=max(temp,A[j]-A[p]+dp[i-1][p]);
+                }
+                dp[i][j]=max(dp[i][j-1],temp);
+            }
+        }
+        
+        return dp[K][N-1];
+        
+    }
+};
+
+// { Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N, K;
+        cin >> K;
+        cin >> N;
+        int A[N];
+        for (int i = 0; i < N; i++) cin >> A[i];
+
+        Solution ob;
+        cout << ob.maxProfit(K, N, A) << endl;
+    }
+    return 0;
+}  // } Driver Code Ends

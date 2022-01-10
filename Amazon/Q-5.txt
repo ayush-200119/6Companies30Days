@@ -1,0 +1,147 @@
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+
+struct TrieNode{
+    struct TrieNode* children[26];
+    bool isEnd;
+};
+
+struct TrieNode *getNode()
+{
+    struct TrieNode *newNode =new TrieNode();
+    
+    for(int i=0;i<26;i++)
+    {
+        newNode->children[i]=NULL;
+    }
+    
+    newNode->isEnd=false;
+    
+    
+    return newNode;
+}
+
+void insert(struct TrieNode *root,string key)
+{
+    int size=key.size();
+    for(int i=0;i<size;i++)
+    {
+        int index=key[i]-'a';
+        if(root->children[index]==NULL)
+            root->children[index]=getNode();
+            
+        root=root->children[index];
+    }
+    
+    root->isEnd=true;
+}
+
+struct TrieNode* search(struct TrieNode *root,string key)
+{
+    int size=key.size();
+    for(int i=0;i<size;i++)
+    {
+        int index=key[i]-'a';
+        if(root->children[index]==NULL)
+            return NULL;
+            
+        root=root->children[index];
+    }
+    
+    return root;
+}
+
+void addLexiographically(struct TrieNode* root,string key,vector<string> &temp)
+{
+    if(root->isEnd==true)
+        temp.push_back(key);
+    
+    for(int i=0;i<26;i++)
+    {
+        if(root->children[i]!=NULL)
+        {
+            char c='a'+i;
+            key=key+c;
+            addLexiographically(root->children[i],key,temp);
+            key.erase(key.end()-1);
+        }
+    }
+}
+
+class Solution{
+public:
+   
+    
+    
+    vector<vector<string>> displayContacts(int n, string contact[], string s)
+    {
+        // code here
+        vector<vector<string>> res;
+         
+        struct TrieNode *root=getNode();
+        
+        for(int i=0;i<n;i++)
+        {
+            insert(root,contact[i]);
+        }
+        
+        string temp="";
+        
+        
+        int i=0;
+        int size=s.length();
+        for(;i<size;i++)
+        {
+            //getting the prefix
+            temp+=s[i];
+            
+            struct TrieNode *found=search(root,temp);
+            
+            if(found==NULL)
+                break;
+            else
+            {
+                vector<string> t;
+                addLexiographically(found,temp,t);
+                res.push_back(t);
+            }
+        }
+        
+        for(;i<size;i++)
+        {
+            res.push_back({"0"});
+        }
+        
+        return res;
+        
+    }
+};
+
+// { Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        string contact[n], s;
+        for(int i = 0;i < n;i++)
+            cin>>contact[i];
+        cin>>s;
+        
+        Solution ob;
+        vector<vector<string>> ans = ob.displayContacts(n, contact, s);
+        for(int i = 0;i < s.size();i++){
+            for(auto u: ans[i])
+                cout<<u<<" ";
+            cout<<"\n";
+        }
+    }
+    return 0;
+}  // } Driver Code Ends

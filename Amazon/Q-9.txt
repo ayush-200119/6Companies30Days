@@ -1,0 +1,85 @@
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+
+class Solution{
+public:
+
+    bool isSafe(int i,int j,vector<vector<int>> &mat,int elem)
+    {
+        //checking in ith row
+        for(int k=0;k<9;k++)
+        {
+            if(mat[i][k]==elem && k!=j)
+            return false;
+        }
+        
+        //checking in jth col
+        for(int k=0;k<9;k++)
+        {
+            if(mat[k][j]==elem && k!=i)
+            return false;
+        }
+        
+        //checking in the section
+        int rs=i-(i%3);
+        int cs=j-(j%3);
+        
+        for(int k=rs;k<rs+3;k++)
+        {
+            for(int p=cs;p<cs+3;p++)
+            {
+                if(mat[k][p]==elem && k!=i && p!=j)
+                {
+                    // cout<<mat[k][p]<<endl<<i<<" "<<j<<endl;
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+
+    int isValid(vector<vector<int>> mat){
+        // code here
+        int row=mat.size();
+        int col=mat[0].size();
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(mat[i][j]!=0)
+                {
+                    if(!isSafe(i,j,mat,mat[i][j]))
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+        
+        
+    }
+};
+
+// { Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        vector<vector<int>> mat(9, vector<int>(9, 0));
+        for(int i = 0;i < 81;i++)
+            cin>>mat[i/9][i%9];
+        
+        Solution ob;
+        cout<<ob.isValid(mat)<<"\n";
+    }
+    return 0;
+}  // } Driver Code Ends

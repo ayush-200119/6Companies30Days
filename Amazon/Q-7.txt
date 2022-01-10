@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution {
+	public:
+		string FirstNonRepeating(string A){
+		    // Code here
+		    queue<char> distinct;
+		    int hash[26]={0};
+		    
+		    distinct.push(A[0]);
+		    string res;
+		    res+=A[0];
+		    hash[A[0]-'a']=1;
+		    
+		    int i=1;
+		    
+		    while(i<A.length())
+		    {
+		        if(hash[A[i]-'a'])
+		        {
+		            hash[A[i]-'a']++;
+		            if(distinct.empty())
+		            {
+		                res+='#';
+		                i++;
+		            }
+		            else
+		            {
+		                if(distinct.front()==A[i] || hash[distinct.front()-'a']>1)
+		                {
+		                    distinct.pop();
+		                }
+		                else
+		                {
+		                    res+=distinct.front();
+		                    i++;
+		                }
+		            }
+		            
+		        }
+		        else
+		        {
+		            distinct.push(A[i]);
+		            hash[A[i]-'a']=1;
+		            res+=distinct.front();
+		            i++;
+		        }
+		    }
+		    
+		    return res;
+		}
+
+};
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		string A;
+		cin >> A;
+		Solution obj;
+		string ans = obj.FirstNonRepeating(A);
+		cout << ans << "\n";
+	}
+	return 0;
+}  // } Driver Code Ends
