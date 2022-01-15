@@ -1,0 +1,132 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution
+{
+    public:
+    //Function to find unit area of the largest region of 1s.
+    
+    bool isSafe(int i,int j,int r,int c,vector<vector<int>> &grid,vector<vector<bool>> &visited)
+    {
+        if(i<0 || i>=r || j<0 || j>=c)
+        return false;
+        
+        if(grid[i][j]==0 || visited[i][j]==true)
+        return false;
+        
+        return true;
+    }
+    
+    void dfs(int i,int j,int r,int c,vector<vector<int>> &grid,vector<vector<bool>> &visited,int &res)
+    {
+        //making the element visited
+        visited[i][j]=true;
+        res++;
+        
+        //upper left
+        if(isSafe(i-1,j-1,r,c,grid,visited))
+        {
+            dfs(i-1,j-1,r,c,grid,visited,res);
+        }
+        
+        //upper
+        if(isSafe(i-1,j,r,c,grid,visited))
+        {
+            dfs(i-1,j,r,c,grid,visited,res);
+        }
+        
+        //upper right
+        if(isSafe(i-1,j+1,r,c,grid,visited))
+        {
+            dfs(i-1,j+1,r,c,grid,visited,res);
+        }
+        
+        //right
+        if(isSafe(i,j+1,r,c,grid,visited))
+        {
+            dfs(i,j+1,r,c,grid,visited,res);
+        }
+        
+        //lower right
+        if(isSafe(i+1,j+1,r,c,grid,visited))
+        {
+            dfs(i+1,j+1,r,c,grid,visited,res);
+        }
+        
+        //lower
+        if(isSafe(i+1,j,r,c,grid,visited))
+        {
+            dfs(i+1,j,r,c,grid,visited,res);
+        }
+        
+        //lower left
+        if(isSafe(i+1,j-1,r,c,grid,visited))
+        {
+            dfs(i+1,j-1,r,c,grid,visited,res);
+        }
+        
+        //left
+        if(isSafe(i,j-1,r,c,grid,visited))
+        {
+            dfs(i,j-1,r,c,grid,visited,res);
+        }
+        
+    }
+    
+    int findMaxArea(vector<vector<int>>& grid) {
+        // Code here
+        int row=grid.size();
+        int col=grid[0].size();
+        
+        int res=INT_MIN;
+        
+        vector<vector<bool>> visited;
+        
+        for(int i=0;i<row;i++)
+        {
+            vector<bool> temp;
+            for(int j=0;j<col;j++)
+            {
+                temp.push_back(false);
+            }
+            visited.push_back(temp);
+        }
+        
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(grid[i][j]==1 && (!visited[i][j]))
+                {
+                    int temp=0;
+                    dfs(i,j,row,col,grid,visited,temp);
+                    res=max(res,temp);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n, m;
+		cin >> n >> m;
+		vector<vector<int>>grid(n, vector<int>(m, -1));
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++){
+				cin >> grid[i][j];
+			}
+		}
+		Solution obj;
+		int ans = obj.findMaxArea(grid);
+		cout << ans << "\n";
+	}
+	return 0;
+}  // } Driver Code Ends
