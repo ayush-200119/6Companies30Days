@@ -1,0 +1,103 @@
+//Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+//User function template for C++
+
+class Solution{
+  public:
+    
+    // vector<int> diffIndex(string &)
+    // {
+    //     set<int> s;
+    //     int size=N.length();
+        
+    //     for(int i=0;i<size/2;i++)
+    //     {
+    //         s.insert(N[i]-'0');
+    //     }
+        
+    //     vector<int> ans(s.begin(),s.end());
+        
+    //     return ans;
+    // }
+    
+    // int findFirst(string &N,char c)
+    // {
+    //     for(int i=0)
+    // }
+    
+    // int findLast(string &N,char c)
+    // {
+        
+    // }
+    
+  
+    string nextPalin(string N) { 
+        //complete the function here
+        int n=N.length();
+        
+        if(n==1 || n==2 || n==3)
+        return "-1";
+        
+        // vector<int> sorted=diffIndex(N);
+        // int size=sorted.size();
+        
+        // if(sorted[size-1]==0 || sorted[size-1]==N[0]-'0')
+        // return "-1";
+        
+        //all set and ready to swap last two elements
+        // int first=sorted[size-1];
+        // int second=sorted[size-2];
+        
+        string firstHalf=N.substr(0,n/2);
+        
+        string temp=firstHalf;
+        
+        next_permutation(temp.begin(),temp.end());
+        
+        if(temp==firstHalf)
+        return "-1";
+        else
+        {
+            sort(firstHalf.begin(),firstHalf.end());
+            
+            if(firstHalf==temp)
+            return "-1";
+            
+            string ans=temp;
+            if(n%2!=0)
+            {
+                ans+=N[n/2];
+            }
+            
+            reverse(temp.begin(),temp.end());
+            ans+=temp;
+            
+            return ans;
+            
+        }
+        
+        
+        
+        
+    }
+};
+
+// { Driver Code Starts.
+
+int main() {
+
+    int t;
+    cin >> t;
+    while(t--){
+        string s;
+        cin >> s;
+        Solution obj;
+        cout << obj.nextPalin(s) << endl;
+    }
+    return 0;
+}  // } Driver Code Ends

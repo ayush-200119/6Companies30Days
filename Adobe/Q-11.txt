@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+
+
+class Solution{
+    public:
+    
+    string toLowercase(string s)
+    {
+        string res="";
+        for(int i=0;i<s.length();i++)
+        {
+            res+=tolower(s[i]);
+        }
+        return res;
+    }
+    
+    
+    
+    void solve(string s,string &res)
+    {
+        int i=0;
+        
+        for(int j=0;j<=s.length();j++)
+        {
+            if(j==s.length())
+            {
+                res+=toLowercase(s.substr(i,j-i));
+            }
+            else
+            {
+                if(isupper(s[j]) && j!=0)
+                {
+                    res+=toLowercase(s.substr(i,j-i));
+                    res+=" ";
+                    i=j;
+                }
+            }
+        }
+    }
+    
+    string amendSentence (string s)
+    {
+        // your code here
+        string res="";
+        solve(s,res);
+        
+        return res;
+        
+    }
+};
+
+// { Driver Code Starts.
+int main()
+{
+	int t; cin >> t;
+	while (t--)
+	{
+		string s; cin >> s;
+		Solution ob;
+		cout << ob.amendSentence (s) << endl;
+	}
+}  // } Driver Code Ends

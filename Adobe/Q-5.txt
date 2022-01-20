@@ -1,0 +1,96 @@
+// Initial Template for C++
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+//User function Template for C++
+class Solution{
+    public:
+    
+    long long int countSubset(vector<int> &powers,int n,int sum,vector<vector<long long int>> &dp)
+    {
+        if(sum==0)
+        {
+            dp[n][sum]= 1;
+            return dp[n][sum];
+        }
+            
+        if(n==0)
+        {
+            dp[n][sum]=0;
+            return dp[n][sum];
+        }
+            
+            
+        if(dp[n][sum]!=-1)
+            return dp[n][sum];
+            
+        // int ans=-1;
+        if(powers[n-1]<=sum)
+        {
+            //choice whether to include or not
+            dp[n][sum]=countSubset(powers,n-1,sum-powers[n-1],dp)+countSubset(powers,n-1,sum,dp);
+            // ans=countSubset(powers,n-1,sum-powers[n-1],dp)+countSubset(powers,n-1,sum,dp);
+        }
+        else
+        {
+            dp[n][sum]=countSubset(powers,n-1,sum,dp);
+            // ans=countSubset(powers,n-1,sum,dp);
+        }
+        
+        
+        return dp[n][sum];
+    }
+    
+    long long int numOfWays(int n, int x)
+    {
+        // code here
+        vector<int> powers;
+        
+        int i=1;
+        int check=pow(i,x);
+        while(check<=n)
+        {
+            powers.push_back(check);
+            i++;
+            check=pow(i,x);
+        }
+        
+        vector<vector<long long int>> dp;
+        int row=powers.size();
+        int col=n;
+        
+        for(int j=0;j<row+1;j++)
+        {
+            vector<long long int> temp;
+            for(int k=0;k<col+1;k++)
+            {
+                temp.push_back(-1);
+            }
+            
+            dp.push_back(temp);
+        }
+        
+        countSubset(powers,row,n,dp);
+        
+        return dp[row][col];
+        
+        
+        
+        
+    }
+};
+
+// { Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int  n, x;
+        cin >> n >> x;
+        Solution ob;
+        cout<<ob.numOfWays(n, x)<<endl;
+    }
+    return 0;
+}
+  // } Driver Code Ends

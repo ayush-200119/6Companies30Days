@@ -1,0 +1,78 @@
+//Initial Template for C++
+
+#include<bits/stdc++.h> 
+using namespace std; 
+
+
+ // } Driver Code Ends
+//User function Template for C++
+
+#define mod 1000000007
+
+class Solution
+{
+  public:
+    
+    long long solve(int N,int K,int orgK,vector<vector<long long>> &dp)
+    {
+        if(N==0)
+        {
+            dp[N][K]=1;
+            return dp[N][K];
+        }
+        
+        if(dp[N][K]!=-1)
+        return dp[N][K];
+        
+        if(K==0)
+        {
+            dp[N][K]= ((21)*(solve(N-1,orgK,orgK,dp))%mod);
+        }
+        else
+        {
+            dp[N][K]= ( (((21)*(solve(N-1,orgK,orgK,dp)))%mod) + ((5)*(solve(N-1,K-1,orgK,dp)))%mod)%mod;
+        }
+        
+        return dp[N][K];
+        
+    }
+  
+    int kvowelwords(int N, int K) {
+        // Write Your Code here
+        
+        vector<vector<long long>> dp;
+        
+        for(int i=0;i<N+1;i++)
+        {
+            vector<long long> temp;
+            for(int j=0;j<K+1;j++)
+            {
+                temp.push_back(-1);
+            }
+            
+            dp.push_back(temp);
+        }
+        
+        return solve(N,K,K,dp)%mod;
+    }
+};
+
+
+// { Driver Code Starts.
+
+
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int N;int K;
+        cin >>N>>K;
+        
+        Solution ob;
+        int ans = ob.kvowelwords(N,K);
+        cout << ans << endl;
+    }
+    return 0;
+}  // } Driver Code Ends

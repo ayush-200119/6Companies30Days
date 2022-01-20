@@ -1,0 +1,150 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+//User function Template for C++
+
+class Solution {
+  public:
+  
+  
+    // int find_ceil(int *arr,int n,int target)
+    // {
+    //     int ans=-1;
+    //     int low=0;
+    //     int high=n-1;
+        
+    //     while(low<=high)
+    //     {
+    //         int mid=(low+high)/2;
+    //         if(arr[mid]>target)
+    //         {
+    //             ans=mid;
+    //             high=mid-1;
+    //         }
+    //         else
+    //         {
+    //             low=mid+1;
+    //         }
+    //     }
+        
+    //     return ans;
+        
+    // }
+    int CBS(int *vec, int low, int high, int key){
+        if(key<=vec[low]){  //base case
+            return low;
+        } 
+        if(key>vec[high]){  //base case
+            return -1;
+        }
+        
+        int mid=(low+high)/2;
+        
+        if(vec[mid]==key){ 
+            return mid;
+        }         
+        
+        else if(vec[mid]<key){
+            if(mid+1<=high && key<=vec[mid+1]){
+                return mid+1;
+            }
+            else{
+                return CBS(vec, mid+1, high, key);
+            }
+        }
+        
+        else{
+            if(mid-1>=low && key>vec[mid-1]){
+                return mid;
+            }
+            else{
+                return CBS(vec, low, mid-1, key);
+            }
+       }
+}
+
+   
+    
+    int Lis(vector<int> &v)
+    {
+        int n=v.size();
+        int lis[n];
+        lis[0]=v[0];
+        int index=1;
+        
+        for(int i=1;i<n;i++)
+        {
+            if(v[i]>lis[index-1])
+            {
+                lis[index]=v[i];
+                index++;
+            }
+            else if(v[i]<lis[0])
+            {
+                lis[0]=v[i];
+            }
+            else
+            {
+                int ind=CBS(lis,0,index-1,v[i]);
+                    lis[ind]=v[i];
+            }
+        }
+        
+        return index;
+        
+    }
+    
+  
+    int minInsAndDel(int A[], int B[], int N, int M) {
+        // code here
+        unordered_set<int> s;
+        for(int i=0;i<M;i++)
+        {
+            s.insert(B[i]);
+        }
+        
+        vector<int> common;
+        
+        for(int i=0;i<N;i++)
+        {
+            if(s.find(A[i])!=s.end())
+            {
+                common.push_back(A[i]);
+            }
+        }
+        
+        if(common.size()==0)
+        return M+N;
+        
+        int lis_length=Lis(common);
+       // cout<<lis_length<<endl;
+        
+        return M+N-2*lis_length;
+        
+        
+        
+    }
+};
+
+// { Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N,M;
+        cin>>N>>M;
+        
+        int A[N], B[M];
+        for(int i=0; i<N; i++)
+            cin>>A[i];
+        for(int i=0; i<M; i++)
+            cin>>B[i];
+
+        Solution ob;
+        cout << ob.minInsAndDel(A,B,N,M) << endl;
+    }
+    return 0;
+}  // } Driver Code Ends

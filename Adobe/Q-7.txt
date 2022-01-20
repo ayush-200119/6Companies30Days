@@ -1,0 +1,95 @@
+//Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution {
+public:
+
+    int solve(int i,int j,vector<int> &A,vector<vector<int>> &dp)
+    {
+        if(i==j)
+        {
+            dp[i][j]=A[i];
+            return dp[i][j];
+        }
+        
+        if(abs(j-i)==1)
+        {
+            dp[i][j]= max(A[i],A[j]);
+            return dp[i][j];
+        }
+        
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        
+        //choice
+        
+        //choosing the ith pot
+        //opponent has choice between [i+1,j]
+        //opponent chooses i+1
+        
+        int temp1=solve(i+2,j,A,dp);
+        
+        //opponent chooses j
+        
+        int temp2=solve(i+1,j-1,A,dp);
+        
+        int temp_ans_1=A[i]+min(temp1,temp2);
+        
+        //choosing the jth pot
+        //opponent chooses from [i,j-1]
+        //opponent chooses ith 
+        
+        //opponent chooses j-1th
+        temp1=solve(i,j-2,A,dp);
+        
+        int temp_ans_2=A[j]+min(temp1,temp2);
+        
+        dp[i][j]= max(temp_ans_1,temp_ans_2);
+        
+        return dp[i][j];
+        
+        
+    }
+
+    int maxCoins(vector<int>&A,int n)
+    {
+	    //Write your code here
+	    int res=0;
+	    
+	    vector<vector<int>> dp;
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        vector<int> temp;
+	        for(int j=0;j<n;j++)
+	            temp.push_back(-1);
+	       
+	        dp.push_back(temp);
+	    }
+	    
+	    return solve(0,n-1,A,dp);
+	    
+	   // return res;
+    }
+};
+
+// { Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N;
+        cin >> N;
+        vector<int>A(N);
+        for (int i = 0; i < N; i++) {
+            cin >> A[i];
+        }
+        Solution ob;
+        cout << ob.maxCoins(A, N) << "\n";
+    }
+    return 0;
+}
+  // } Driver Code Ends
