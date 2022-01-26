@@ -1,0 +1,121 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution {
+public:
+
+   bool inRange(int i,int j,int r,int c,vector<vector<bool>> &visited)
+   {
+       if(i<0 || i>=r || j<0 || j>=c)
+       return false;
+       
+       if(visited[i][j]==true)
+       return false;
+       
+       return true;
+       
+   }
+   
+   bool solve(int i,int j,int index,string &word,vector<vector<char>> &board,int r,int c,vector<vector<bool>> &visited)
+   {
+       if(index==word.size())
+        return true;
+       
+       if(board[i][j]==word[index])
+       {
+           visited[i][j]=true;
+           //check for all possible options
+           //up
+           if(inRange(i-1,j,r,c,visited))
+           {
+               if(solve(i-1,j,index+1,word,board,r,c,visited))
+                return true;
+           }
+           
+           //right
+           if(inRange(i,j+1,r,c,visited))
+           {
+               if(solve(i,j+1,index+1,word,board,r,c,visited))
+                 return true;
+           }
+           
+           //down
+           if(inRange(i+1,j,r,c,visited))
+           {
+               if(solve(i+1,j,index+1,word,board,r,c,visited))
+                return true;
+           }
+           
+           //left
+           if(inRange(i,j-1,r,c,visited))
+           {
+               if(solve(i,j-1,index+1,word,board,r,c,visited))
+                return true;
+           }
+           
+           //bactracking
+           visited[i][j]=false;
+           
+       }
+       
+       //character not matched
+       return false;
+       
+   }
+
+    bool isWordExist(vector<vector<char>>& board, string word) {
+        // Code here
+        
+        int row=board.size();
+        int col=board[0].size();
+        
+        vector<vector<bool>> visited;
+        for(int i=0;i<row;i++)
+        {
+            vector<bool> temp;
+            for(int j=0;j<col;j++)
+            {
+                temp.push_back(false);
+            }
+            visited.push_back(temp);
+        }
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(word[0]==board[i][j])
+                {
+                    if(solve(i,j,0,word,board,row,col,visited))
+                        return true;
+                }
+            }
+        }
+        
+        return false;
+        
+    }
+};
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n, m;
+		cin >> n >> m;
+		vector<vector<char>>board(n, vector<char>(m, '*'));
+		for(int i = 0; i < n; i++)
+			for(int j = 0; j < m; j++)
+				cin >> board[i][j];
+		string word;
+		cin >> word;
+		Solution obj;
+		bool ans = obj.isWordExist(board, word);
+		if(ans)
+			cout << "1\n";
+		else cout << "0\n";
+	}
+	return 0;
+}  // } Driver Code Ends

@@ -1,0 +1,112 @@
+class Solution {
+public:
+    bool isCycle(vector<vector<int>> &adj,int source,bool rs[],bool visited[])
+    {
+        visited[source]=true;
+        rs[source]=true;
+        
+        //traversing all adjacents
+        for(auto u:adj[source])
+        {
+            if(visited[u]==false)
+            {
+                if(isCycle(adj,u,rs,visited))
+                    return true;
+            }
+            else if(rs[u])
+            {
+                return true;
+            }
+        }
+        
+        rs[source]=false;
+        return false;
+        
+    }
+    
+    void dfsTopological(vector<vector<int>> &adj,int source,bool visited[],stack<int> &s)
+    {
+        visited[source]=true;
+        
+        //traversing all adjacents
+        for(auto u:adj[source])
+        {
+            if(visited[u]==false)
+            {
+                dfsTopological(adj,u,visited,s);
+            }
+        }
+        
+        //this current vertex can be added
+        s.push(source);
+        
+    }
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        
+        vector<vector<int>> adj;
+        for(int i=0;i<numCourses;i++)
+        {
+            vector<int> temp;
+            adj.push_back(temp);
+        }
+        
+        //forming the graph
+        int size=prerequisites.size();
+        
+        for(int i=0;i<size;i++)
+        {
+            int adjacent=prerequisites[i][0];
+            int source=prerequisites[i][1];
+            
+            //adding the edge
+            adj[source].push_back(adjacent);
+        }
+        
+        bool visited[numCourses];
+        bool rs[numCourses];
+        
+        for(int i=0;i<numCourses;i++)
+        {
+            visited[i]=false;
+            rs[i]=false;
+        }
+        
+        //if cycle exists then return an empty array
+        for(int i=0;i<numCourses;i++)
+        {
+            if(visited[i]==false)
+            {
+                if(isCycle(adj,i,rs,visited))
+                    return {};
+            }
+        }
+        
+        //resetting the visited array
+        for(int i=0;i<numCourses;i++)
+        {
+            visited[i]=false;
+        }
+        
+        //if no cylce find topological sort
+        stack<int> s;
+        for(int i=0;i<numCourses;i++)
+        {
+            if(visited[i]==false)
+            {
+                dfsTopological(adj,i,visited,s);
+            }
+        }
+        
+        vector<int> ans;
+        while(!s.empty())
+        {
+            ans.push_back(s.top());
+            s.pop();
+        }
+        
+        return ans;
+        
+        
+    }
+};

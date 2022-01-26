@@ -1,0 +1,153 @@
+struct element{
+    int row;
+    int col;
+};
+
+class Solution {
+public:
+    
+    bool isSafe(int i,int j,int r,int c,vector<vector<bool>> &visited)
+    {
+        if(i<0 || i>=r || j<0 || j>=c)
+            return false;
+        
+        if(visited[i][j]==true)
+            return false;
+        
+        return true;
+    }
+    
+    void bfs(queue<element> &q,vector<vector<int>> &heights,vector<vector<bool>> &dp,int r,int c)
+    {
+        
+        while(!q.empty())
+        {
+            int size=q.size();        
+            for(int i=0;i<size;i++)
+            {
+                struct element temp=q.front();
+                q.pop();
+                
+                int row=temp.row;
+                int col=temp.col;
+                
+                //up
+                if(isSafe(row-1,col,r,c,dp))
+                {
+                    if(heights[row-1][col]>=heights[row][col])
+                    {
+                        dp[row-1][col]=true;
+                        q.push({row-1,col});
+                        // visited[row-1][col]=true;
+                    }
+                }
+                
+                //down
+                if(isSafe(row+1,col,r,c,dp))
+                {
+                    if(heights[row+1][col]>=heights[row][col])
+                    {
+                        dp[row+1][col]=true;
+                        q.push({row+1,col});
+                        // visited[row+1][col]=true;
+                    }
+                }
+                
+                //right
+                if(isSafe(row,col+1,r,c,dp))
+                {
+                    if(heights[row][col+1]>=heights[row][col])
+                    {
+                        dp[row][col+1]=true;
+                        q.push({row,col+1});
+                        // visited[row][col+1]=true;
+                    }
+                }
+                
+                //left
+                if(isSafe(row,col-1,r,c,dp))
+                {
+                    if(heights[row][col-1]>=heights[row][col])
+                    {
+                        dp[row][col-1]=true;
+                        q.push({row,col-1});
+                        // visited[row][col-1]=true;
+                    }
+                }
+                
+            }
+        }
+        
+    }
+    
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        
+        int row=heights.size();
+        int col=heights[0].size();
+        
+        vector<vector<bool>> dpPacific;
+        // vector<vector<bool>> visited;
+        queue<element> q;
+        
+        for(int i=0;i<row;i++)
+        {
+            vector<bool> temp;
+            for(int j=0;j<col;j++)
+            {
+                if(i==0 || j==0)
+                {   
+                    temp.push_back(true);
+                    q.push({i,j});
+                }
+                else
+                    temp.push_back(false);
+            }
+            
+            dpPacific.push_back(temp);
+            // visited.push_back(temp);
+        }
+        
+        bfs(q,heights,dpPacific,row,col);
+        
+        queue<element> a;
+        vector<vector<bool>> dpAtlantic;
+        // vector<vector<bool>> aVisited;
+        
+        for(int i=0;i<row;i++)
+        {
+            vector<bool> temp;
+            for(int j=0;j<col;j++)
+            {
+                if(i==row-1 || j==col-1)
+                {
+                    temp.push_back(true);
+                    a.push({i,j});
+                }
+                else
+                {
+                    temp.push_back(false);
+                }
+            }
+            dpAtlantic.push_back(temp);
+            // aVisited.push_back(temp);
+        }
+        
+        bfs(a,heights,dpAtlantic,row,col);
+        
+        vector<vector<int>> res;
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(dpPacific[i][j] && dpAtlantic[i][j])
+                {
+                    res.push_back({i,j});
+                }
+            }
+        }
+        
+        return res;
+        
+        
+    }
+};

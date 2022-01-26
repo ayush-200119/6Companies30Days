@@ -1,0 +1,75 @@
+class Solution {
+public:
+    
+    void zeroesAtEnd(vector<vector<int>> &grid,vector<int> &ans)
+    {
+        int row=grid.size();
+        int col=row;
+        for(int i=0;i<row;i++)
+        {
+            int count=0;
+            for(int j=col-1;j>=0;j--)
+            {
+                if(grid[i][j]==0)
+                    count++;
+                else
+                    break;
+            }
+            ans.push_back(count);
+        }
+        
+        return;
+    }
+    
+    //greedy approach
+    int stepsRequired(vector<int> &zeroes,int dimension)
+    {
+        int ans=0;
+        
+        for(int i=0;i<dimension-1;i++)
+        {
+            //this level does not have sufficient zeroes
+            if(zeroes[i]<dimension-i-1)
+            {
+                //try finding the nearest index which has the required no. of zeroes for this index
+                int j=i+1;
+                int zeroesAtI=dimension-i-1;
+                while(j<dimension)
+                {
+                    if(zeroes[j]>=zeroesAtI)
+                    {
+                        break;
+                    }
+                    j++;
+                }
+                
+                //no index found
+                if(j==dimension)
+                    return -1;
+                
+                while(j>i)
+                {
+                    //adding steps;
+                    ans++;
+                    swap(zeroes[j],zeroes[j-1]);
+                    j--;
+                }
+                
+            }
+        }
+        
+        return ans;
+        
+        
+    }
+    
+    int minSwaps(vector<vector<int>>& grid) {
+        
+        vector<int> ans;
+        zeroesAtEnd(grid,ans);
+        
+        int dimension=grid.size();
+        return stepsRequired(ans,dimension);
+        
+    }
+};

@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    void dfs(vector<vector<int>> &isConnected,int source,bool visited[],int edges)
+    {
+        visited[source]=true;
+        
+        //visiting all of its adjacent if they are not yet visited
+        for(int i=0;i<edges;i++)
+        {
+            if(isConnected[source][i]==1 && visited[i]==false)
+                dfs(isConnected,i,visited,edges);
+        }
+        
+        return;
+    }
+    
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        
+        int edges=isConnected.size();
+        
+        bool visited[edges];
+        for(int i=0;i<edges;i++)
+        {
+            visited[i]=false;
+        }
+        
+        int components=0;
+        for(int i=0;i<edges;i++)
+        {
+            if(visited[i]==false)
+            {
+                components++;
+                dfs(isConnected,i,visited,edges);
+            }
+        }
+        
+        
+        return components;
+        
+        
+        
+    }
+};

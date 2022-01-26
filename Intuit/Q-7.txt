@@ -1,0 +1,73 @@
+class Solution {
+public:
+    
+    int sum(vector<int> &weights)
+    {
+        int ans=0;
+        for(int i=0;i<weights.size();i++)
+        {
+            ans+=weights[i];
+        }
+        
+        return ans;
+    }
+    
+    bool numberOfDays(vector<int> &weights,int target_days,int target_capacity)
+    {
+        int days=1;
+        
+        int sum=0;
+        
+        for(int i=0;i<weights.size();i++)
+        {
+            if(weights[i]>target_capacity)
+                return false;
+            
+            if(sum+weights[i]>target_capacity)
+            {
+                sum=weights[i];
+                days++;
+            }
+            else
+            {
+                sum=sum+weights[i];
+            }
+            
+            if(days>target_days)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+        
+
+    }
+    
+    int shipWithinDays(vector<int>& weights, int days) {
+        
+        int low=1;
+        int high=sum(weights);
+        
+        int ans=INT_MAX;
+        
+        while(low<=high)
+        {
+            int mid=low-((low-high)/2);
+            
+            if(numberOfDays(weights,days,mid))
+            {
+                ans=min(ans,mid);
+                high=mid-1;
+            }
+            else
+            {
+                low=mid+1;
+            }
+            
+        }
+        
+        return ans;
+        
+    }
+};

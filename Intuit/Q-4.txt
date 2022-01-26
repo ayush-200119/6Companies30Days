@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+
+
+class Solution
+{
+    public:
+    //Function to find the largest number after k swaps.
+    void solve(string &s,int currIndex,int k,string &res)
+    {
+        if(k==0 || currIndex==s.length())
+        return;
+        
+        //finding the max character after the currIndex
+        char max=s[currIndex];
+        int size=s.length();
+        
+        for(int j=currIndex+1;j<size;j++)
+        {
+            if(s[j]>max)
+            {
+                max=s[j];
+            }
+        }
+        
+        if(max!=s[currIndex])
+        {
+            //a swap used
+            k--;
+        }
+        else
+        {
+            //if currIndex is itself max go for the next
+            return solve(s,currIndex+1,k,res);
+        }
+        
+        //finding the occurences of max and swapping with each of them to see which leads a 
+        //valid answer
+        for(int j=size-1;j>currIndex;j--)
+        {
+            if(s[j]==max)
+            {
+                swap(s[currIndex],s[j]);
+                solve(s,currIndex+1,k,res);
+                if(s>res)
+                {
+                    res=s;
+                }
+                //backtrack
+                swap(s[currIndex],s[j]);
+            }
+        }
+        
+        return ;
+    }
+    
+    string findMaximumNum(string str, int k)
+    {
+       // code here.
+       string res=str;
+       solve(str,0,k,res);
+       
+       return res;
+    }
+};
+
+// { Driver Code Starts.
+
+int main()
+{
+    int t, k;
+    string str;
+
+    cin >> t;
+    while (t--)
+    {
+        cin >> k >> str;
+        Solution ob;
+        cout<< ob.findMaximumNum(str, k) << endl;
+    }
+    return 0;
+}
+  // } Driver Code Ends

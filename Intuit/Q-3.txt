@@ -1,0 +1,144 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int MAX_DIGITS = 5;
+
+int missingNumber(const string& str);
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        string str;
+        cin>>str;
+        cout << missingNumber(str)<<endl;
+    }
+	return 0;
+}
+// } Driver Code Ends
+
+
+/* You are required to complete this function
+which return the required missing number
+if present else return -1*/
+
+int stringToInt(const string &s)
+{
+    int res=0;
+    
+    for(int i=0;i<s.length();i++)
+    {
+        int digit=s[i]-'0';
+        res=res*10+digit;
+    }
+    
+    return res;
+}
+
+bool isPossible(int start,int len,const string &s,int expected)
+{
+    if(start+len-1>=s.length())
+    {
+        return false;
+    }
+    
+    string curr="";
+    
+    curr=s.substr(start,len);
+    
+    int curr_int=stringToInt(curr);
+    
+    if(curr_int==expected)
+    return true;
+    
+    return false;
+}
+
+int missingNumber(const string& str)
+{
+    // Code here
+    
+    string largest[7]={"-1","9","99","999","9999","99999","999999"};
+    string largest_prev[7]={"-1","8","98","998","9998","99998","999998"};
+    
+    int size=str.length();
+    int ans=-1;
+    
+    for(int curr_length=1;curr_length<=6;curr_length++)
+    {
+        if(curr_length<=size)
+        {
+            string start=str.substr(0,curr_length);
+            int start_int=stringToInt(start);
+            
+            int j=curr_length;
+            int length=curr_length;
+            int option1,option2;
+            
+            while(j<size)
+            {
+                if(start==largest[length])
+                {
+                    option1=length+1;
+                    option2=length+1;
+                }
+                else if(start==largest_prev[length])
+                {
+                    option1=length;
+                    option2=length+1;
+                }
+                else
+                {
+                    option1=length;
+                    option2=length;
+                }
+                
+                bool res1=isPossible(j,option1,str,start_int+1);
+                
+                bool res2=isPossible(j,option2,str,start_int+2);
+                
+                if(res1==false && res2 == false)
+                {
+                    ans=-1;
+                    break;
+                }
+                else if(res1==true)
+                {
+                    start=str.substr(j,option1);
+                    start_int=stringToInt(start);
+                    length=option1;
+                    j=j+option1;
+                }
+                else
+                {
+                    ans=start_int+1;
+                    start=str.substr(j,option2);
+                    start_int=stringToInt(start);
+                    length=option2;
+                    j=j+option2;
+                }
+                
+            }
+            
+            if(j==size && ans!=-1)
+            return ans;
+            else
+            ans=-1;
+            
+        }
+        else
+        {
+            break;
+        }
+    }
+    
+    //if after breaking the string has length less than 6 then always a possibility
+    // if(size<6)
+    // {
+    //     return stringToInt(str)+1;
+    // }
+    
+    return -1;
+    
+}

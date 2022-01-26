@@ -1,0 +1,106 @@
+struct element{
+    int row;
+    int col;
+    int d;
+};
+
+class Solution {
+public:
+    
+    bool isSafe(int i,int j,int r,int c,vector<vector<int>> &visited)
+    {
+        if(i<0 || i>=r || j<0 || j>=c)
+            return false;
+        
+        if(visited[i][j]!=-1)
+            return false;
+        
+        return true;
+    }
+    
+    int bfs(queue<element> &q,vector<vector<int>> &visited,int row,int col)
+    {
+        int ans=0;
+        while(!q.empty())
+        {
+            int c=q.size();
+            for(int i=0;i<c;i++)
+            {
+                struct element temp=q.front();
+                q.pop();
+                
+                int curr_row=temp.row;
+                int curr_col=temp.col;
+                int curr_dist=temp.d;
+                
+                if(isSafe(curr_row+1,curr_col,row,col,visited))
+                {
+                    visited[curr_row+1][curr_col]=curr_dist+1;
+                    
+                    //updating ans
+                    ans=max(ans,curr_dist+1);
+                    
+                    q.push({curr_row+1,curr_col,curr_dist+1});
+                }
+                
+                if(isSafe(curr_row-1,curr_col,row,col,visited))
+                {
+                    visited[curr_row-1][curr_col]=curr_dist+1;
+                    ans=max(ans,curr_dist+1);
+                    q.push({curr_row-1,curr_col,curr_dist+1});
+                }
+                
+                if(isSafe(curr_row,curr_col+1,row,col,visited))
+                {
+                    visited[curr_row][curr_col+1]=curr_dist+1;
+                    ans=max(ans,curr_dist+1);
+                    q.push({curr_row,curr_col+1,curr_dist+1});
+                }
+                
+                if(isSafe(curr_row,curr_col-1,row,col,visited))
+                {
+                    visited[curr_row][curr_col-1]=curr_dist+1;
+                    ans=max(ans,curr_dist+1);
+                    q.push({curr_row,curr_col-1,curr_dist+1});
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    int maxDistance(vector<vector<int>>& grid) {
+        
+        queue<element> q;
+        vector<vector<int>> visited;
+        
+        int row=grid.size();
+        int col=grid[0].size();
+        
+        for(int i=0;i<row;i++)
+        {
+            vector<int> temp;
+            for(int j=0;j<col;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    q.push({i,j,0});
+                    temp.push_back(0);
+                }
+                else
+                {
+                    temp.push_back(-1);
+                }
+            }
+            visited.push_back(temp);
+        }
+        
+        int ans= bfs(q,visited,row,col);
+        
+        if(ans==0)
+            return -1;
+        else
+            return ans;
+        
+    }
+};

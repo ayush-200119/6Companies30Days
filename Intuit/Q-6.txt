@@ -1,0 +1,119 @@
+/**
+ * // This is the MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class MountainArray {
+ *   public:
+ *     int get(int index);
+ *     int length();
+ * };
+ */
+
+class Solution {
+public:
+    int searchLeft(int start,int end,MountainArray &mountainArr,int target)
+    {
+        int ans=-1;
+        while(start<=end)
+        {
+            int mid=(start+end)/2;
+            int curr=mountainArr.get(mid);
+            if(curr==target)
+            {
+                return mid;
+            }
+            
+            if(curr>target)
+            {
+                end=mid-1;
+            }
+            else
+            {
+                start=mid+1;
+            }
+            
+        }
+        
+        return ans;
+    }
+    
+    int searchRight(int start,int end,MountainArray &mountainArr,int target)
+    {
+        int ans=-1;
+        while(start<=end)
+        {
+            int mid=(start+end)/2;
+            int curr=mountainArr.get(mid);
+            if(curr==target)
+                return mid;
+            
+            if(curr>target)
+            {
+                start=mid+1;
+            }
+            else
+            {
+                end=mid-1;
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    int findInMountainArray(int target, MountainArray &mountainArr) {
+        int size=mountainArr.length();
+        int low=0;
+        int high=size-1;
+        
+        int ans=INT_MAX;
+        
+        //finding peak element
+        while(low<=high)
+        {
+            int mid=(low+high)/2;
+            int curr=mountainArr.get(mid);
+                
+            if(mid==0)
+            {
+                low=mid+1;
+                continue;
+            }
+            
+            if(mid==size-1)
+            {
+                high=mid-1;
+                continue;
+            }
+            
+            int prev=mountainArr.get(mid-1);
+            int next=mountainArr.get(mid+1);
+            
+            //peak point
+            if(curr>prev && curr>next)
+            {
+                ans=mid;
+                break;
+            }
+            else if(curr>prev && next>curr)
+            {
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+        }
+        
+        //can divide the array into two parts 0 to ans and ans+1 to end
+        int left=searchLeft(0,ans,mountainArr,target);
+        if(left!=-1)
+            return left;
+        
+        int right=searchRight(ans+1,size-1,mountainArr,target);
+        if(right!=-1)
+            return right;
+        
+        return -1;
+        
+    }
+};
