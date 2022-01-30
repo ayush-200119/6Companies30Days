@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int sum(vector<int> &piles)
+    {
+        int ans=0;
+        for(int i=0;i<piles.size();i++)
+            ans+=piles[i];
+        
+        return ans;
+    }
+    
+    int find(int start,int end,vector<int> &piles,vector<vector<int>> &dp)
+    {
+        if(start>end)
+            return 0;
+        
+        if(dp[start][end]!=-1)
+            return dp[start][end];
+        
+        //Alice chose the start one
+        //Bob has options to take either start+1 or end
+        int option_bob_1=find(start+2,end,piles,dp);
+        int option_bob_2=find(start+1,end-1,piles,dp);
+        
+        int alice_1=piles[start]+min(option_bob_1,option_bob_2);
+        
+        //Alice chose the end one
+        //Bob has options to choose either start or end-1
+        int option_bob_3=find(start,end-2,piles,dp);
+        int alice_2=piles[end]+min(option_bob_2,option_bob_3);
+        
+        
+        dp[start][end]= max(alice_1,alice_2);
+        
+        return dp[start][end];
+        
+    }
+    
+    bool stoneGame(vector<int>& piles) {
+        
+        int size=piles.size();
+        
+        int low=0;
+        int high=size-1;
+        int s=sum(piles);
+        
+        vector<vector<int>> dp;
+        for(int i=0;i<size;i++)
+        {
+            vector<int> temp;
+            for(int j=0;j<size;j++)
+                temp.push_back(-1);
+            
+            dp.push_back(temp);
+        }
+        
+        int aliceMax=find(low,high,piles,dp);
+        
+        int bobMax=s-aliceMax;
+        
+        if(aliceMax>bobMax)
+            return true;
+        
+        return false;
+        
+    }
+};

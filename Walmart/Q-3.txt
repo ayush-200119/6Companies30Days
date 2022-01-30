@@ -1,0 +1,45 @@
+class Solution {
+public:
+    
+    int countOptions(string colors,char check)
+    {
+        int size=colors.length();
+        int i=0;
+        
+        int ans=0;
+        
+        while(i<size-1)
+        {
+            int count=0;
+            while(i<size && colors[i]==check)
+            {
+                count++;
+                i++;
+            }
+            
+            if(count>=3)
+            {
+                ans+=(count-2);
+            }
+            
+            
+            i++;
+            
+        }
+        
+        return ans;
+        
+    }
+    
+    bool winnerOfGame(string colors) {
+     
+        int countA=countOptions(colors,'A');
+        int countB=countOptions(colors,'B');
+        
+        if(countA>countB)
+            return true;
+        
+        return false;
+        
+    }
+};

@@ -1,0 +1,82 @@
+
+struct element{
+    int adj;
+    double prob;
+};
+
+class Solution {
+public:
+    
+    void relax(int source,vector<vector<element>> &adjacent,double prob[],priority_queue<pair<double,int>> &pq)
+    {
+        for(auto i:adjacent[source])
+        {
+            int a=i.adj;
+            double p=i.prob;
+            
+            if(prob[source]*p>prob[a])
+            {
+                prob[a]=prob[source]*p;
+                pq.push({prob[a],a});
+            }
+            
+        }
+    }
+    
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end)     {
+        //djiskstra
+        bool included[n];
+        for(int i=0;i<n;i++)
+            included[i]=false;
+                
+        //probability array
+        double probability[n];
+        for(int i=0;i<n;i++)
+            probability[i]=0.0;
+        
+        
+        int size=edges.size();
+        //creating a adjacent matrix
+        vector<vector<element>> adjacent;
+        for(int i=0;i<n;i++)
+        {
+            vector<element> temp;
+            adjacent.push_back(temp);
+        }
+        
+        //filling the adjacency matrix
+        for(int i=0;i<size;i++)
+        {
+            int vertex1=edges[i][0];
+            int vertex2=edges[i][1];
+            
+            adjacent[vertex1].push_back({vertex2,succProb[i]});
+            adjacent[vertex2].push_back({vertex1,succProb[i]});
+        }
+        
+        //mark start as visited and mark its adjacent in the proability array
+        priority_queue<pair<double,int>> pq;
+        pq.push({(double)1.0,start});
+        probability[start]=(double)1.0;
+        
+        while(!pq.empty())
+        {
+            pair<double,int> temp=pq.top();
+            pq.pop();
+            
+            double p=temp.first;
+            int vertex=temp.second;
+            
+            if(!included[vertex])
+            {
+                included[vertex]=true;
+                relax(vertex,adjacent,probability,pq);
+            }
+        }
+        
+        
+        
+        return probability[end];
+        
+    }
+};

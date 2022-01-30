@@ -1,0 +1,85 @@
+class Solution {
+public:
+    struct comparator{
+        
+        bool operator()(string &a,string &b)
+        {
+            int n=a.length();
+            int m=b.length();
+            
+            if(n<m)
+                return false;
+            else if(n>m)
+                return true;
+            else
+            {
+                int i=0;
+                int j=0;
+                while(i<n && j<m)
+                {
+                    if(a[i]<b[j])
+                        return false;
+                    else if(a[i]>b[j])
+                        return true;
+                    
+                    i++;
+                    j++;
+                }
+            }
+            
+            return false;
+        }
+        
+    };
+    
+    bool comp(string &a,string b)
+    {
+        int n=a.length();
+            int m=b.length();
+            
+            if(n<m)
+                return false;
+            else if(n>m)
+                return true;
+            else
+            {
+                int i=0;
+                int j=0;
+                while(i<n && j<m)
+                {
+                    if(a[i]<b[j])
+                        return false;
+                    else if(a[i]>b[j])
+                        return true;
+                    
+                    i++;
+                    j++;
+                }
+            }
+            
+            return false;
+    }
+    
+    string kthLargestNumber(vector<string>& nums, int k) {
+        
+        priority_queue<string,vector<string>,comparator> pq;
+        
+        for(int i=0;i<nums.size();i++)
+        {
+            if(pq.size()<k)
+            {
+                pq.push(nums[i]);
+            }
+            else
+            {
+                if(comp(nums[i],pq.top()))
+                {
+                    pq.pop();
+                    pq.push(nums[i]);
+                }
+            }
+        }
+        
+        return pq.top();
+    }
+};

@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+     
+        
+        if(dividend==0)
+            return 0;
+        
+        // cout<<INT_MAX<<endl;
+        int ans;
+        if(dividend==INT_MIN && divisor==-1)
+        {
+            ans=abs(dividend+1);
+        }
+        else
+        {
+            ans=dividend/divisor;
+        }
+        
+        return ans;
+        
+    }
+};

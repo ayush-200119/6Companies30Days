@@ -1,0 +1,78 @@
+class Solution {
+public:
+    
+    int findMin(vector<int> &nums)
+    {
+        int ans=INT_MAX;
+        int size=nums.size();
+        for(int i=0;i<size;i++)
+        {
+            ans=min(ans,nums[i]);
+        }
+        
+        return ans;
+    }
+    
+    void offsetSums(vector<int> &sums,int offset)
+    {
+        int size=sums.size();
+        for(int i=0;i<size;i++)
+        {
+            sums[i]=sums[i]+offset;
+        }
+    }
+    
+    bool dfs(vector<int> &ans,int sum,int n)
+    {
+        if(sum==0)
+            return true;
+        if(n==0)
+            return false;
+        
+        if(dfs(ans,sum,n-1))
+            return true;
+        
+        int temp=ans[n-1];
+        ans[n-1]=-temp;
+        if(dfs(ans,sum-temp,n-1))
+            return true;
+        ans[n-1]=temp;
+        
+        return false;
+        
+    }
+    
+    vector<int> recoverArray(int n, vector<int>& sums) {
+        
+        int size=sums.size();
+        int mn=findMin(sums);
+        offsetSums(sums,-mn);
+        
+        multiset<int> ms;
+        for(int i=0;i<size;i++)
+            ms.insert(sums[i]);
+        
+        vector<int> ans;
+        for(int i=0;i<n;i++)
+        {
+            multiset<int> temp;
+            
+            int diff=*next(ms.begin());
+            ans.push_back(diff);
+            while(ms.size())
+            {
+                int first=*(ms.begin());
+                temp.insert(first);
+                ms.erase(ms.begin());
+                ms.erase(ms.find(first+diff));
+            }
+            swap(ms,temp);
+        }
+        
+        int s=ans.size();
+        dfs(ans,-mn,s);
+        
+        return ans;
+        
+    }
+};

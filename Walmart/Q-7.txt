@@ -1,0 +1,151 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool isSubSequence(vector<int> &v1, vector<int> &v2, int n, int m) {
+
+    if (m == 0) return true;
+    if (n == 0) return false;
+
+    if (v1[n - 1] == v2[m - 1]) return isSubSequence(v1, v2, n - 1, m - 1);
+
+    return isSubSequence(v1, v2, n - 1, m);
+}
+
+
+ // } Driver Code Ends
+/*The function returns a vector containing the
+increasing sub-sequence of length 3 if present
+else returns an empty vector */
+class Solution{
+  public:
+    
+    void prev_smaller(vector<int> &arr,vector<int> &ps)
+    {
+        stack<int> s;
+        s.push(arr[0]);
+        ps[0]=-1;
+        
+        for(int i=1;i<arr.size();i++)
+        {
+            //pop elements from stack
+            if(arr[i]<=s.top())
+            {
+                while(!s.empty() && arr[i]<=s.top())
+                {
+                    s.pop();
+                }
+                
+                if(s.empty())
+                {
+                    ps[i]=-1;
+                }
+                else
+                {
+                    ps[i]=s.top();
+                }
+                s.push(arr[i]);
+            }
+            else
+            {
+                ps[i]=s.top();
+                s.push(arr[i]);
+            }
+        }
+    }
+    
+    void next_greater(vector<int> &arr,vector<int> &ng)
+    {
+        int size=arr.size();
+        ng[size-1]=INT_MAX;
+        stack<int> s;
+        s.push(arr[size-1]);
+        
+        for(int i=size-2;i>=0;i--)
+        {
+            if(arr[i]>=s.top())
+            {
+                while(!s.empty() && arr[i]>=s.top())
+                {
+                    s.pop();
+                }
+                
+                if(s.empty())
+                {
+                    ng[i]=INT_MAX;
+                }
+                else
+                {
+                    ng[i]=s.top();
+                }
+                
+                s.push(arr[i]);
+            }
+            else
+            {
+                ng[i]=s.top();
+                s.push(arr[i]);
+            }
+        }
+    }
+  
+    vector<int> find3Numbers(vector<int> arr, int N) {
+        // Your code here
+        if(N<3)
+        return {};
+        
+        vector<int> ps(N);
+        vector<int> ng(N);
+        
+        prev_smaller(arr,ps);
+        next_greater(arr,ng);
+        
+        vector<int> ans;
+        for(int i=1;i<N-1;i++)
+        {
+            if(ps[i]!=-1 && ng[i]!=INT_MAX)
+            {
+                ans.push_back(ps[i]);
+                ans.push_back(arr[i]);
+                ans.push_back(ng[i]);
+                
+                break;
+            }
+        }
+        
+        return ans;
+        
+    }
+};
+
+// { Driver Code Starts.
+
+// Driver program to test above function
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
+        Solution obj;
+        auto res = obj.find3Numbers(a, n);
+
+        // wrong format output
+        if (!res.empty() and res.size() != 3) {
+            cout << -1 << "\n";
+        }
+
+        if (res.empty()) {
+            cout << 0 << "\n";
+        } else if ((res[0] < res[1] and res[1] < res[2]) and
+                   isSubSequence(a, res, n, res.size())) {
+            cout << 1 << "\n";
+        } else {
+            cout << -1 << "\n";
+        }
+    }
+
+    return 0;
+}  // } Driver Code Ends
